@@ -1,0 +1,7 @@
+{
+    "env": {
+        "MONGO_ATLAS_PW": "gjLW4FCmLNJfoby1",
+        "MONGO_USER": "akshay333",
+        "MONGO_DEFAULT_DATABSE": "my_backend"
+    }
+}
