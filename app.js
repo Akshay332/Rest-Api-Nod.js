@@ -47,7 +47,7 @@ app.use('/api/admin', admin)
 
 //Bring in the hotels routes 
 const product = require('./routes/product')
-app.use('/api/products', product)
+app.use('/api/product', product)
 
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`)
