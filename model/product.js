@@ -21,12 +21,6 @@ const Product = new mongoose.Schema({
     gallery: {
         type: String
     },
-    StartProduct: {
-        type: String
-    },
-    EndProduct: {
-        type: String
-    },
     itinerary: {
         type: String
     }
