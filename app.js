@@ -39,7 +39,9 @@ app.use((req, res, next) => {
 app.use('/uploads', express.static('uploads'))
 
 //BodyParser Middleware
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
 
 //Bring in the admin routes 
 const admin = require('./routes/admin')
