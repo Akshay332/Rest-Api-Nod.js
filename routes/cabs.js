@@ -1,13 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const Product = require('../model/product')
+const Cabs = require('../model/cabs')
 const adminAuth = require('../middleware/adminAuth')
 const upload = require('../middleware/upload')
 
 
-//Create hotel by admin
-router.post('/create', adminAuth, upload.array('gallery'), async(req, res) => {
-    const product = new Product({
+router.post('/create', adminAuth, upload.array('images'), async(req, res) => {
+    const cabs = new Cabs({
         ...req.body,
         owner: req.admin._id
     })
@@ -17,22 +16,20 @@ router.post('/create', adminAuth, upload.array('gallery'), async(req, res) => {
             path = path + files.path + ','
         })
         path = path.substring(0, path.lastIndexOf(","))
-        product.gallery = path
+        cabs.images = path
     }
     try {
-        await product.save()
-        res.status(201).send(product)
+        await cabs.save()
+        res.status(201).send(cabs)
     } catch (e) {
         res.status(400).send(e)
     }
 })
 
 
-
-//Read hotels by admin
-router.get('/getProduct', adminAuth, async(req, res) => {
-    Product.find({}).then((product) => {
-        res.send(product)
+router.get('/getCabs', adminAuth, async(req, res) => {
+    Cabs.find({}).then((cabs) => {
+        res.send(cabs)
     }).catch((e) => {
         res.status(500).send()
     })
@@ -40,60 +37,54 @@ router.get('/getProduct', adminAuth, async(req, res) => {
 })
 
 
-
 //Read hotel by id
 router.get('/read/:id', adminAuth, async(req, res) => {
     const _id = req.params.id
     try {
-        const product = await Product.findOne({ _id, owner: req.admin._id })
-        if (!product) {
+        const cabs = await Cabs.findOne({ _id, owner: req.admin._id })
+        if (!cabs) {
             return res.status(404).send()
         }
-        res.send(product)
+        res.send(cabs)
     } catch (e) {
         res.status(500).send()
     }
 })
 
-
-
-// update hotel information by admin
-router.patch('/updateProduct/:ProductID', adminAuth, async(req, res) => {
+router.patch('/update/:cabsID', adminAuth, async(req, res) => {
     const updates = Object.keys(req.body)
-    const allowUpdates = ['name', 'description', 'itinerary']
+    const allowUpdates = ['title', 'price', 'images']
     const isValidOperation = updates.every((update) => allowUpdates.includes(update))
     if (!isValidOperation) {
         return res.status(400).send({ error: 'Invalid updates!' })
     }
     try {
-        const product = await Product.findOne({ _id: req.params.productID, owner: req.admin._id })
-        if (!product) {
+        const cabs = await Cabs.findOne({ _id: req.params.cabsID, owner: req.admin._id })
+        if (!cabs) {
             return res.status(404).send()
         }
-        updates.forEach((update) => product[update] = req.body[update])
-        await product.save()
-        res.send(product)
+        updates.forEach((update) => cabs[update] = req.body[update])
+        await cabs.save()
+        res.send(cabs)
     } catch (e) {
         res.status(400).send(e)
     }
 
 })
 
-//Delete hotel by admin by id
 router.delete('/delete/:id', adminAuth, async(req, res) => {
 
     try {
-        const product = await Product.findOneAndDelete({ _id: req.params.id, owner: req.admin._id })
-        if (!product) {
+        const cabs = await Cabs.findOneAndDelete({ _id: req.params.id, owner: req.admin._id })
+        if (!cabs) {
             return res.status(404).send()
         }
 
-        res.send(product)
+        res.send(cabs)
     } catch (e) {
         res.status(400).send(e)
     }
 })
-
 
 
 module.exports = router

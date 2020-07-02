@@ -39,17 +39,24 @@ app.use((req, res, next) => {
 app.use('/uploads', express.static('uploads'))
 
 //BodyParser Middleware
-app.use(bodyParser.urlencoded({
-    extended: false
-}))
+app.use(bodyParser.json())
 
 //Bring in the admin routes 
 const admin = require('./routes/admin')
 app.use('/api/admin', admin)
 
-//Bring in the hotels routes 
+const destination = require('./routes/destination')
+app.use('/api/destinations', destination)
+
+//Bring in the products routes 
 const product = require('./routes/product')
 app.use('/api/products', product)
+
+const hotel = require('./routes/hotels')
+app.use('/api/hotels', hotel)
+
+const cabs = require('./routes/cabs')
+app.use('/api/cabs', cabs)
 
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`)
