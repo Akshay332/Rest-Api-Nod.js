@@ -58,6 +58,9 @@ app.use('/api/hotels', hotel)
 const cabs = require('./routes/cabs')
 app.use('/api/cabs', cabs)
 
+const contactus = require('./routes/contactus')
+app.use('/api/contactus', contactus)
+
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`)
 })
