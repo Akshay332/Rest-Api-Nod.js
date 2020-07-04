@@ -36,4 +36,4 @@ const contactusSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('hotel', Hotel);
+module.exports = mongoose.model('Contact', contactusSchema);
