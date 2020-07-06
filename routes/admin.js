@@ -4,10 +4,12 @@ const Admin = require('../model/admin')
 const auth = require('../middleware/adminAuth')
 const { sendWelcomeEmail } = require('../emails/account')
 
+
 router.post('/register', async(req, res) => {
     const admin = new Admin(req.body)
     try {
         await admin.save()
+        sendWelcomeEmail(user.email, user.name)
         const token = await admin.generateAuthToken()
         res.status(201).send({ admin, token })
     } catch (e) {

@@ -3,7 +3,7 @@ const router = express.Router()
 const jwt = require('jsonwebtoken')
 const User = require('../model/user')
 const auth = require('../middleware/auth')
-
+const { sendWelcomeEmail } = require('../emails/account')
 
 //Create users
 
@@ -12,6 +12,7 @@ router.post('/register', async(req, res) => {
 
     try {
         await user.save()
+        sendWelcomeEmail(user.email, user.name)
         const token = await user.generateAuthToken()
         res.status(201).send({ user, token })
     } catch (e) {
