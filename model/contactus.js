@@ -2,14 +2,18 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 
 const contactusSchema = new mongoose.Schema({
-    firstName: {
+    name: {
         type: String,
         required: true
     },
-    lastName: {
-        type: String,
-        required: true
-    },
+    // firstName: {
+    //     type: String,
+    //     required: true
+    // },
+    // lastName: {
+    //     type: String,
+    //     required: true
+    // },
     email: {
         type: String,
         trim: true,
@@ -26,10 +30,10 @@ const contactusSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    enquiry: {
-        type: String,
-        required: true
-    },
+    // enquiry: {
+    //     type: String,
+    //     required: true
+    // },
     message: {
         type: String,
         required: true

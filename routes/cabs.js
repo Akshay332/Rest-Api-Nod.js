@@ -51,26 +51,38 @@ router.get('/read/:id', adminAuth, async(req, res) => {
     }
 })
 
-router.patch('/update/:cabsID', adminAuth, async(req, res) => {
+router.patch('/updateCabs/:id', adminAuth, async(req, res) => {
     const updates = Object.keys(req.body)
-    const allowUpdates = ['title', 'price', 'images']
-    const isValidOperation = updates.every((update) => allowUpdates.includes(update))
+    const allowedUpdates = ['title', 'price']
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
         return res.status(400).send({ error: 'Invalid updates!' })
     }
     try {
-        const cabs = await Cabs.findOne({ _id: req.params.cabsID, owner: req.admin._id })
+        const cabs = await Cabs.findOne({ _id: req.params.id, owner: req.admin._id })
+
         if (!cabs) {
             return res.status(404).send()
         }
+
         updates.forEach((update) => cabs[update] = req.body[update])
         await cabs.save()
         res.send(cabs)
     } catch (e) {
         res.status(400).send(e)
     }
-
 })
+
+// router.patch('/update/:cabsId', adminAuth, async(req, res) => {
+//     try {
+//         const updateCabs = await Cabs.updateOne({ _id: req.params.cabsId }, { $set: { title: req.body.title } }
+
+//         )
+//         res.json(updateCabs)
+//     } catch (err) {
+//         res.json({ message: err })
+//     }
+// })
 
 router.delete('/delete/:id', adminAuth, async(req, res) => {
 

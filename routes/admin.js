@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Admin = require('../model/admin')
 const auth = require('../middleware/adminAuth')
+const { sendWelcomeEmail } = require('../emails/account')
 
 router.post('/register', async(req, res) => {
     const admin = new Admin(req.body)
