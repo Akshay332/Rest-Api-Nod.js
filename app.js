@@ -61,6 +61,9 @@ app.use('/api/hotels', hotel)
 const cabs = require('./routes/cabs')
 app.use('/api/cabs', cabs)
 
+const users = require('./routes/users')
+app.use('/api/users', users)
+
 const contactus = require('./routes/contactus')
 app.use('/api/contactus', contactus)
 
