@@ -1,0 +1,7 @@
+{
+    "env": {
+        "MONGO_ATLAS_PW": "DaA4l0yENnGiIMS1",
+        "MONGO_USER": "akshay121",
+        "MONGO_DEFAULT_DATABSE": "restapi"
+    }
+}
