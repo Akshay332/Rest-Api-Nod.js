@@ -10,19 +10,19 @@ router.post("/register", upload.single("avatar"), async (req, res) => {
     Admin.findOne({ email: req.body.email }).then(async (user) => {
       if (user) {
         return res.status(404).json({ email: "email-found" });
+      } else {
+        const admin = new Admin({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+          avatar: req.file.path,
+        });
+        const token = await admin.generateAuthToken();
+
+        await admin
+          .save()
+          .then((admin) => res.status(201).send({ admin, token }));
       }
-
-      const admin = new Admin({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        avatar: req.file.path,
-      });
-      const token = await admin.generateAuthToken();
-
-      await admin
-        .save()
-        .then((admin) => res.status(201).send({ admin, token }));
     });
   } catch (err) {
     res, json(err).send(err);
