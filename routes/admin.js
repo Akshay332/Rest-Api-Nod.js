@@ -4,34 +4,47 @@ const Admin = require("../model/admin");
 const auth = require("../middleware/adminAuth");
 const { sendWelcomeEmail } = require("../emails/account");
 const upload = require("../middleware/upload");
+const firebase = require("./firebase");
 
 router.post("/register", upload.single("avatar"), async (req, res) => {
   try {
-    Admin.findOne({ email: req.body.email }).then(async (user) => {
-      if (user) {
-        return res.status(404).json({ email: "email-found" });
-      } else {
-        const admin = new Admin({
-          name: req.body.name,
-          email: req.body.email,
-          password: req.body.password,
-          avatar: req.file.path,
-        });
-        const token = await admin.generateAuthToken();
-        const urlImg = createdProduct({
-          request: {
-            type: "GET",
-            url:
-              "https://rest-api-my-new.herokuapp.com/api/admin/register" +
-              admin._id,
-          },
-        });
+    if (!req.file) {
+      res.status(400).send("Error: No files found");
+    } else {
+      const imgFile = firebase.bucket.file(req.file.originalname);
+      const imgFileWriter = imgFile.createWriteStream({
+        metadata: {
+          contentType: req.file.mimetype,
+        },
+      });
+      imgFileWriter.on("error", (err) => {
+        console.log(err);
+      });
+      imgFileWriter.on("finish", () => {
+        const metaData = await file.getMetadata()
+        const url = metaData[0].mediaLink
+        res.status(200).send("File uploaded.",url);
+      });
+      imgFileWriter.end(req.file.buffer);
 
-        await admin
-          .save()
-          .then((admin) => res.status(201).send({ admin, token, urlImg }));
-      }
-    });
+      Admin.findOne({ email: req.body.email }).then(async (user) => {
+        if (user) {
+          return res.status(404).json({ email: "email-found" });
+        } else {
+          const admin = new Admin({
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password,
+            avatar: req.file.path,
+          });
+          const token = await admin.generateAuthToken();
+
+          await admin
+            .save()
+            .then((admin) => res.status(201).send({ admin, token }));
+        }
+      });
+    }
   } catch (err) {
     res, json(err).send(err);
   }
