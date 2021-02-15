@@ -4,28 +4,12 @@ const Admin = require("../model/admin");
 const auth = require("../middleware/adminAuth");
 const { sendWelcomeEmail } = require("../emails/account");
 const upload = require("../middleware/upload");
-const firebase = require("./firebase");
+const firebase = require("../base");
 
 router.post("/register", upload.single("avatar"), async (req, res) => {
   try {
-    if (!req.file) {
-      res.status(400).send("Error: No files found");
-    } else {
-      const imgFile = firebase.bucket.file(req.file.originalname);
-      const imgFileWriter = imgFile.createWriteStream({
-        metadata: {
-          contentType: req.file.mimetype,
-        },
-      });
-      imgFileWriter.on("error", (err) => {
-        console.log(err);
-      });
-      imgFileWriter.on("finish", () => {
-        const metaData = await file.getMetadata()
-        const url = metaData[0].mediaLink
-        res.status(200).send("File uploaded.",url);
-      });
-      imgFileWriter.end(req.file.buffer);
+ 
+     
 
       Admin.findOne({ email: req.body.email }).then(async (user) => {
         if (user) {
@@ -36,17 +20,36 @@ router.post("/register", upload.single("avatar"), async (req, res) => {
             email: req.body.email,
             password: req.body.password,
             avatar: req.file.path,
+            
           });
           const token = await admin.generateAuthToken();
+          // console.log(req.file)
+          // console.log(req.file.originalname)
 
+          const uploadfile = req.file.originalname
+          const imgFile = firebase.bucket.file(uploadfile);
+          const imgFileWriter = imgFile.createWriteStream({
+            metadata: {
+              contentType: req.file.mimetype,
+            },
+          });
+          imgFileWriter.on("error", (err) => {
+            console.log(err);
+          });
+          imgFileWriter.on("finish", () => {
+            const metaData = file.getMetadata();
+            const url = metaData[0].mediaLink;
+            res.status(200).send("File uploaded.", url);
+          });
+          imgFileWriter.end(req.file.buffer);
           await admin
             .save()
-            .then((admin) => res.status(201).send({ admin, token }));
+            .then((admin) => res.status(201).send({ admin, token, }));
         }
       });
-    }
+    
   } catch (err) {
-    res, json(err).send(err);
+    res.json(err).send(err);
   }
 });
 

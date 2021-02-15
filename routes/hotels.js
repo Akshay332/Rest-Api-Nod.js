@@ -5,19 +5,12 @@ const adminAuth = require('../middleware/adminAuth')
 const upload = require('../middleware/upload')
 
 
-router.post('/create', adminAuth, upload.array('images'), async(req, res) => {
+router.post('/create',  async(req, res) => {
     const hotels = new Hotels({
         ...req.body,
-        owner: req.admin._id
+       
     })
-    if (req.files) {
-        let path = ''
-        req.files.forEach(function(files, index, arr) {
-            path = path + files.path + ','
-        })
-        path = path.substring(0, path.lastIndexOf(","))
-        hotels.images = path
-    }
+   
     try {
         await hotels.save()
         res.status(201).send(hotels)

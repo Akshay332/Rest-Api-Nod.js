@@ -11,10 +11,7 @@ const toursSchema = new Schema({
     description: {
         type: String
     },
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Admin'
-    }
+
 }, {
     timestamps: true
 })

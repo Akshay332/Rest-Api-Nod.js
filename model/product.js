@@ -1,32 +1,33 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // adding validation to the schema
-const validate = require('mongoose-validator');
+const validate = require("mongoose-validator");
 
 // creating the model schema
-const Product = new mongoose.Schema({
+const Product = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        validate: validate({ validator: 'isLength', arguments: [3, 50], message: 'Name length must be between 3 and 50' })
+      type: String,
+      validate: validate({
+        validator: "isLength",
+        arguments: [3, 50],
+        message: "Name length must be between 3 and 50",
+      }),
     },
     description: {
-        type: String
-
+      type: String,
     },
 
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Admin'
+    featuredImg: {
+      type: String,
     },
-    gallery: {
-        type: String
-    },
-    itinerary: {
-        type: String
-    }
-}, {
-    timestamps: true
-});
+
+    gallery: [],
+  },
+  {
+    timestamps: true,
+  }
+);
 
 // exporting the model
-module.exports = mongoose.model('product', Product);
+module.exports = mongoose.model("product", Product);

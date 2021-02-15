@@ -15,10 +15,7 @@ const Hotel = new mongoose.Schema({
         required: true
     },
 
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Admin'
-    },
+
     images: {
         type: String
     }

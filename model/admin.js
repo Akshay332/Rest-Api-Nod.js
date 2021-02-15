@@ -43,11 +43,7 @@ const AdminSchema = new mongoose.Schema({
     timestamps: true
 })
 
-AdminSchema.virtual('hotel', {
-    ref: 'Hotel',
-    localField: '_id',
-    foreignField: 'owner'
-})
+
 
 
 AdminSchema.methods.toJSON = function() {
