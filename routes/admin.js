@@ -18,21 +18,18 @@ router.post("/register", upload.single("avatar"), async (req, res) => {
           avatar: req.file.path,
         });
         const token = await admin.generateAuthToken();
+        const urlImg = createdProduct({
+          request: {
+            type: "GET",
+            url:
+              "https://rest-api-my-new.herokuapp.com/api/admin/register" +
+              admin._id,
+          },
+        });
 
-        await admin.save().then((admin) =>
-          res
-            .status(201)
-            .send({ admin, token })
-            .json({
-              message: "Created product successfully",
-              createdProduct: {
-                request: {
-                  type: "GET",
-                  url: "https://rest-api-my-new.herokuapp.com/api/admin/register" + admin._id,
-                },
-              },
-            })
-        );
+        await admin
+          .save()
+          .then((admin) => res.status(201).send({ admin, token, urlImg }));
       }
     });
   } catch (err) {
