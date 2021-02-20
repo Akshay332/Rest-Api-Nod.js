@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+var path = require("path");
 
 
 
@@ -25,6 +26,8 @@ const app = express()
 //defining the port
 const PORT = process.env.PORT || 3000
 
+
+
 //Defining the Middlewares
 app.use(cors());
 
@@ -35,6 +38,9 @@ app.use((req, res, next) => {
     next()
 })
 
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname + '/html/index.html'));
+});
 //Set the static folder
 app.use('/uploads', express.static('uploads'))
 
